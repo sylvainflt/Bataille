@@ -86,6 +86,7 @@ public class Paquet {
 			cartes[1] = p1;
 			cartes[0] = p2;
 		}	
+		indiceTop += 2;
 	}
 	
 	public Carte[] premiereMoitie() {
