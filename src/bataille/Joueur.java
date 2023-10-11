@@ -28,15 +28,15 @@ public class Joueur {
 		return c;
 	}
 	
-	public void recupere(Carte[] pli) {
+	public void recupere(Carte[] pli, int nbCartesPli) {
 		
-		nbCartes += pli.length;
+		nbCartes += nbCartesPli;
 		
-		for(int i=nbCartes-1; i>=pli.length; i--) {				
-			cartes[i] = cartes[i-pli.length];				
+		for(int i=nbCartes-1; i>=nbCartesPli; i--) {				
+			cartes[i] = cartes[i-nbCartesPli];				
 		}
 		
-		for(int i=0; i<pli.length; i++) {
+		for(int i=0; i<nbCartesPli; i++) {
 			cartes[i] = pli[i];
 		}
 		
@@ -45,8 +45,9 @@ public class Joueur {
 	public void affichePaquet() {
 		System.out.println("--- paquet --------------------");
 		for(int i=0; i<nbCartes; i++) {
-			System.out.println(cartes[i]);
+			System.out.print(cartes[i]+" ");
 		}
+		System.out.println();
 		System.out.println("-------------------------------");
 	}
 }

@@ -14,28 +14,32 @@ public class Bataille {
 	
 	private static Joueur joueur2;
 	
-	private static int compare(Carte[] pli) {
+	private static Carte[] pli = new Carte[Valeur.values().length * Couleur.values().length];
+	
+	private static int nbCartesPli = 2;
+	
+	private static int compare(Carte[] pli, int nbCartesPli) {
 		
-		Carte c1 = pli[0];
-		Carte c2 = pli[1];
+		Carte c1 = pli[nbCartesPli-2];
+		Carte c2 = pli[nbCartesPli-1];
 		int compare = c1.compareTo(c2);
 		
 		if(compare < 0) {
 			
-			System.out.println(joueur1.getNbCartes()+" --- "+c1.toString()+" est inférieure à "+c2.toString()+" --- "+joueur2.getNbCartes());
+			System.out.println("("+joueur1.getNbCartes()+") *** "+c1.toString()+" < "+c2.toString()+" *** ("+joueur2.getNbCartes()+")");
 			pointsJoueur2 += 2;			
 			return -1;			
 			
 		}else if(compare == 0) {
 			
-			System.out.println(joueur1.getNbCartes()+" --- "+c1.toString()+" est égale à "+c2.toString()+" --- "+joueur2.getNbCartes());
+			System.out.println("("+joueur1.getNbCartes()+") *** "+c1.toString()+" = "+c2.toString()+" *** ("+joueur2.getNbCartes()+")");
 			pointsJoueur1++;
 			pointsJoueur2++;					
 			return 0;
 			
 		}else {
 			
-			System.out.println(joueur1.getNbCartes()+" --- "+c1.toString()+" est supérieure à "+c2.toString()+" --- "+joueur2.getNbCartes());
+			System.out.println("("+joueur1.getNbCartes()+") *** "+c1.toString()+" > "+c2.toString()+" *** ("+joueur2.getNbCartes()+")");
 			pointsJoueur1 += 2;			
 			return 1;
 		}
@@ -46,8 +50,8 @@ public class Bataille {
 	
 	public static void main(String[] args) {
 		
-		paquet.melanger();
-		paquet.melanger();
+		//paquet.melanger();
+		//paquet.melanger();
 		paquet.melanger();		
 		
 		joueur1 = new Joueur(paquet.premiereMoitie());
@@ -64,13 +68,50 @@ public class Bataille {
 				
 		System.out.println("taper 1 pour piocher, 0 pour afficher les paquets");
 		int choix  = sc.nextInt();
+		boolean bataille = false;
 		
 		while(joueur1.aDesCartes() && joueur2.aDesCartes()) {
 						
 			if(choix == 1) {                          
-				
 				// on pioche
-				piocher();
+				Carte c1 = joueur1.pioche();
+				Carte c2 = joueur2.pioche();
+				
+				pli[nbCartesPli-2] = c1;
+				pli[nbCartesPli-1] = c2;
+				
+				int compare = compare(pli, nbCartesPli);
+				
+				
+				
+				if(compare == -1) {
+					// carte 1 inférieure à carte 2
+					joueur2.recupere(pli, nbCartesPli);
+					if(bataille) {
+						nbCartesPli = 2;
+						bataille = false;
+					}
+				}else if(compare == 0) {
+					// carte 1 égale à carte 2
+					
+					bataille = true;
+					// on pioche 2 cartes qu'on ajoute au pli
+					Carte c3 = joueur1.pioche();
+					Carte c4 = joueur2.pioche();
+					nbCartesPli += 2;
+					pli[nbCartesPli-2] = c3;
+					pli[nbCartesPli-1] = c4;
+					// on ajoute 2 place pour le prochain tirage
+					nbCartesPli += 2;
+					
+				}else if(compare == 1) {
+					// carte 1 supérieure à carte 2
+					joueur1.recupere(pli, nbCartesPli);
+					if(bataille) {
+						nbCartesPli = 2;
+						bataille = false;
+					}
+				}
 				
 				if(!joueur1.aDesCartes()) {
 					System.out.println("joueur 2 a gagné !");
@@ -91,30 +132,6 @@ public class Bataille {
 		
 	}
 	
-	private static void piocher() {
-			
-		Carte c1 = joueur1.pioche();
-		Carte c2 = joueur2.pioche();
-		Carte[] pli = new Carte[2];
-		pli[0] = c1;
-		pli[1] = c2;
-		
-		int compare = compare(pli);
-		
-		if(compare == -1) {
-			// carte 1 inférieure à carte 2
-			joueur2.recupere(pli);
-		}else if(compare == 0) {
-			// carte 1 égale à carte 2
-			
-			
-			
-		}else if(compare == 1) {
-			// carte 1 supérieure à carte 2
-			joueur1.recupere(pli);
-		}
-		
-	}
 	
 	private static void jeuVidePaquet() {
 		Carte c1 = paquet.piocher();
@@ -123,7 +140,7 @@ public class Bataille {
 			Carte[] pli = new Carte[2];
 			pli[0] = c1;
 			pli[1] = c2;
-			compare(pli);
+			compare(pli, nbCartesPli);
 			c1 = paquet.piocher();
 			c2 = paquet.piocher();
 		}		
