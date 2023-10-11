@@ -11,13 +11,20 @@ public class Joueur {
 		}
 	}
 	
+	public int getNbCartes() {
+		return nbCartes;
+	}
+
 	public boolean aDesCartes() {
 		return nbCartes > 0;
 	}
 	
 	public Carte pioche() {
-		Carte c = cartes[nbCartes-1];
-		nbCartes--;
+		Carte c = null;
+		if(nbCartes > 0) {
+			c = cartes[nbCartes-1];
+			nbCartes--;
+		}		
 		return c;
 	}
 	
@@ -25,7 +32,7 @@ public class Joueur {
 		
 		nbCartes += pli.length;
 		
-		for(int i=nbCartes-1; i>1; i--) {				
+		for(int i=nbCartes-1; i>=pli.length; i--) {				
 			cartes[i] = cartes[i-pli.length];				
 		}
 		
