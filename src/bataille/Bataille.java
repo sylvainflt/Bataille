@@ -1,6 +1,13 @@
 package bataille;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Scanner;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class Bataille {
 
@@ -18,6 +25,12 @@ public class Bataille {
 	
 	private static int nbCartesPli = 2;
 	
+	private static JLabel affichePli;
+	
+	private static JButton piocherBouton;
+	
+	private static boolean bataille = false;
+	
 	private static int compare(Carte[] pli, int nbCartesPli) {
 		
 		Carte c1 = pli[nbCartesPli-2];
@@ -26,20 +39,24 @@ public class Bataille {
 		
 		if(compare < 0) {
 			
-			System.out.println("("+joueur1.getNbCartes()+") *** "+c1.toString()+" < "+c2.toString()+" *** ("+joueur2.getNbCartes()+")");
+			String texte = "("+joueur1.getNbCartes()+") *** "+c1.toString()+" < "+c2.toString()+" *** ("+joueur2.getNbCartes()+")";
+			System.out.println(texte);
+			affichePli.setText(texte);
 			pointsJoueur2 += 2;			
 			return -1;			
 			
 		}else if(compare == 0) {
-			
-			System.out.println("("+joueur1.getNbCartes()+") *** "+c1.toString()+" = "+c2.toString()+" *** ("+joueur2.getNbCartes()+")");
+			String texte = "BATAILLE !!!\n ("+joueur1.getNbCartes()+") *** "+c1.toString()+" = "+c2.toString()+" *** ("+joueur2.getNbCartes()+")";
+			System.out.println(texte);
+			affichePli.setText(texte);
 			pointsJoueur1++;
 			pointsJoueur2++;					
 			return 0;
 			
 		}else {
-			
-			System.out.println("("+joueur1.getNbCartes()+") *** "+c1.toString()+" > "+c2.toString()+" *** ("+joueur2.getNbCartes()+")");
+			String texte = "("+joueur1.getNbCartes()+") *** "+c1.toString()+" > "+c2.toString()+" *** ("+joueur2.getNbCartes()+")";
+			System.out.println(texte);
+			affichePli.setText(texte);
 			pointsJoueur1 += 2;			
 			return 1;
 		}
@@ -50,6 +67,9 @@ public class Bataille {
 	
 	public static void main(String[] args) {
 		
+		JFrame frame = new JFrame("Bataille");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
+        
 		//paquet.melanger();
 		//paquet.melanger();
 		paquet.melanger();		
@@ -57,20 +77,38 @@ public class Bataille {
 		joueur1 = new Joueur(paquet.premiereMoitie());
 		joueur2 = new Joueur(paquet.secondeMoitie());
 		
-		Scanner sc = new Scanner(System.in);
-		jeu(sc);	
+		affichePli = new JLabel();
+		frame.getContentPane().add(affichePli, BorderLayout.CENTER);
+				
+		piocherBouton = new JButton("piocher");        
+		piocherBouton.setActionCommand("piocher");
+		piocherBouton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if ("piocher".equals(e.getActionCommand())) {
+					jeu();
+		        }
+				
+			}
+		});
+		frame.getContentPane().add(piocherBouton, BorderLayout.PAGE_END);
+		
+			
+		
+		frame.pack();
+        frame.setVisible(true);
+        frame.setSize(350, 150);
 	}
 	
-	private static void jeu(Scanner sc) {
+	private static void jeu() {
 		
 		joueur1.affichePaquet();
-		joueur2.affichePaquet();
-				
-		System.out.println("taper 1 pour piocher, 0 pour afficher les paquets");
-		int choix  = sc.nextInt();
-		boolean bataille = false;
+		joueur2.affichePaquet();				
 		
-		while(joueur1.aDesCartes() && joueur2.aDesCartes()) {
+		int choix  = 1;
+		
+		//while(joueur1.aDesCartes() && joueur2.aDesCartes()) {
 						
 			if(choix == 1) {                          
 				// on pioche
@@ -81,9 +119,7 @@ public class Bataille {
 				pli[nbCartesPli-1] = c2;
 				
 				int compare = compare(pli, nbCartesPli);
-				
-				
-				
+												
 				if(compare == -1) {
 					// carte 1 inférieure à carte 2
 					joueur2.recupere(pli, nbCartesPli);
@@ -115,10 +151,10 @@ public class Bataille {
 				
 				if(!joueur1.aDesCartes()) {
 					System.out.println("joueur 2 a gagné !");
-					break;
+					//break;
 				}else if(!joueur2.aDesCartes()) {
 					System.out.println("joueur 1 a gagné !");
-					break;
+					//break;
 				}			
 				
 			}else if(choix == 0){ 
@@ -126,9 +162,8 @@ public class Bataille {
 				joueur1.affichePaquet();
 				joueur2.affichePaquet();
 			}
-			System.out.println("taper 1 pour piocher, 0 pour afficher les paquets");
-			choix  = sc.nextInt();
-		}
+			
+		//}
 		
 	}
 	
