@@ -83,7 +83,7 @@ public class Bataille {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
         
 		//paquet.melanger();
-		//paquet.melanger();
+		paquet.melanger();
 		paquet.melanger();		
 		
 		joueur1 = new Joueur(paquet.premiereMoitie());
@@ -129,7 +129,7 @@ public class Bataille {
 		
 		int choix  = 1;
 		
-		//while(joueur1.aDesCartes() && joueur2.aDesCartes()) {
+		if(joueur1.aDesCartes() && joueur2.aDesCartes()) {
 						
 			if(choix == 1) {                          
 				// on pioche
@@ -184,7 +184,16 @@ public class Bataille {
 				joueur2.affichePaquet();
 			}
 			
-		//}
+		}else {
+			affichePli.setFont(new Font("Serif", Font.PLAIN, 26));
+			if(!joueur1.aDesCartes()) {
+				System.out.println("le joueur2 a gagné la partie !");
+				affichePli.setText("le joueur2 a gagné la partie !");
+			}else {
+				System.out.println("le joueur1 a gagné la partie !");
+				affichePli.setText("le joueur1 a gagné la partie !");
+			}
+		}
 		
 	}
 	

@@ -86,7 +86,7 @@ public class Carte {
 				break;
 			case COEUR : 
 				switch(valeur) {
-					case DEUX : carte = "\uD83C\uDCAB2"; break;
+					case DEUX : carte = "\uD83C\uDCB2"; break;
 					case TROIS : carte = "\uD83C\uDCB3"; break;
 					case QUATRE : carte = "\uD83C\uDCB4"; break;
 					case CINQ : carte = "\uD83C\uDCB5"; break;
