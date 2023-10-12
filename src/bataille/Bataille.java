@@ -1,6 +1,7 @@
 package bataille;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Scanner;
@@ -27,6 +28,10 @@ public class Bataille {
 	
 	private static JLabel affichePli;
 	
+	private static JLabel afficheScore1;
+	
+	private static JLabel afficheScore2;
+	
 	private static JButton piocherBouton;
 	
 	private static boolean bataille = false;
@@ -37,29 +42,36 @@ public class Bataille {
 		Carte c2 = pli[nbCartesPli-1];
 		int compare = c1.compareTo(c2);
 		
+		afficheScore1.setText(joueur1.getNbCartes()+"");
+		afficheScore2.setText(joueur2.getNbCartes()+"");
+		
 		if(compare < 0) {
 			
-			String texte = "("+joueur1.getNbCartes()+") *** "+c1.toString()+" < "+c2.toString()+" *** ("+joueur2.getNbCartes()+")";
+			String texte = "("+joueur1.getNbCartes()+") *** "+c1+" < "+c2+" *** ("+joueur2.getNbCartes()+")";
 			System.out.println(texte);
-			affichePli.setText(texte);
+			affichePli.setText(c1.toString2()+" < "+c2.toString2());
+			
 			pointsJoueur2 += 2;			
 			return -1;			
 			
 		}else if(compare == 0) {
-			String texte = "BATAILLE !!!\n ("+joueur1.getNbCartes()+") *** "+c1.toString()+" = "+c2.toString()+" *** ("+joueur2.getNbCartes()+")";
+			String texte = "("+joueur1.getNbCartes()+") *** "+c1+" = "+c2+" *** ("+joueur2.getNbCartes()+")";
 			System.out.println(texte);
-			affichePli.setText(texte);
+			affichePli.setText(c1.toString2()+" = "+c2.toString2());
+			
 			pointsJoueur1++;
 			pointsJoueur2++;					
 			return 0;
 			
 		}else {
-			String texte = "("+joueur1.getNbCartes()+") *** "+c1.toString()+" > "+c2.toString()+" *** ("+joueur2.getNbCartes()+")";
+			String texte = "("+joueur1.getNbCartes()+") *** "+c1+" > "+c2+" *** ("+joueur2.getNbCartes()+")";
 			System.out.println(texte);
-			affichePli.setText(texte);
+			affichePli.setText(c1.toString2()+" > "+c2.toString2());
+			
 			pointsJoueur1 += 2;			
 			return 1;
 		}
+		
 		
 	}
 	
@@ -77,9 +89,18 @@ public class Bataille {
 		joueur1 = new Joueur(paquet.premiereMoitie());
 		joueur2 = new Joueur(paquet.secondeMoitie());
 		
+		afficheScore1 = new JLabel();
+		afficheScore1.setText(new Integer(joueur1.getNbCartes()).toString());
+		frame.getContentPane().add(afficheScore1, BorderLayout.WEST);
+		
 		affichePli = new JLabel();
+		affichePli.setFont(new Font("Serif", Font.PLAIN, 180));
 		frame.getContentPane().add(affichePli, BorderLayout.CENTER);
 				
+		afficheScore2 = new JLabel();
+		afficheScore2.setText(new Integer(joueur2.getNbCartes()).toString());
+		frame.getContentPane().add(afficheScore2, BorderLayout.EAST);
+		
 		piocherBouton = new JButton("piocher");        
 		piocherBouton.setActionCommand("piocher");
 		piocherBouton.addActionListener(new ActionListener() {
@@ -98,7 +119,7 @@ public class Bataille {
 		
 		frame.pack();
         frame.setVisible(true);
-        frame.setSize(350, 150);
+        frame.setSize(1000, 600);
 	}
 	
 	private static void jeu() {

@@ -20,7 +20,7 @@ public class Paquet {
 	public String toString() {
 		String cartesString = "";
 		for(int i=0; i < cartes.length; i++) {
-			cartesString += cartes[i].toString();
+			cartesString += cartes[i];
 		}
 		return cartesString;
 	}
